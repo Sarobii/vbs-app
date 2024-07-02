@@ -3,6 +3,8 @@
 import TaskList from '../components/TaskList';
 import TaskForm from '../components/TaskForm';
 import { SessionProvider } from "next-auth/react"
+import { useSession } from "next-auth/react"
+import { Auth0Profile } from 'next-auth/providers/auth0';   
 
 
 export default function Home() {

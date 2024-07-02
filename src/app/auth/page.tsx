@@ -1,25 +1,33 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Theme, Button, TextField, Flex, Text, Card, Box } from '@radix-ui/themes';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Theme,
+  Button,
+  TextField,
+  Flex,
+  Text,
+  Card,
+  Box,
+} from "@radix-ui/themes";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const url = isLogin ? '/api/auth/login' : '/api/auth/signup';
+    const url = isLogin ? "/api/auth/login" : "/api/auth/signup";
     const body = isLogin ? { email, password } : { email, password, name };
 
     try {
       const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
 
@@ -27,8 +35,8 @@ export default function AuthPage() {
 
       if (response.ok) {
         if (isLogin) {
-          localStorage.setItem('token', data.token);
-          router.push('/dashboard');
+          localStorage.setItem("token", data.token);
+          router.push("/dashboard");
         } else {
           setIsLogin(true);
         }
@@ -36,8 +44,8 @@ export default function AuthPage() {
         alert(data.message);
       }
     } catch (error) {
-      console.error('Auth error:', error);
-      alert('An error occurred. Please try again.');
+      console.error("Auth error:", error);
+      alert("An error occurred. Please try again.");
     }
   };
 
@@ -48,12 +56,16 @@ export default function AuthPage() {
           <form onSubmit={handleSubmit}>
             <Flex direction="column" gap="4">
               <Text size="5" weight="bold" align="center">
-                {isLogin ? 'Sign in to your account' : 'Create a new account'}
+                {isLogin ? "Sign in to your account" : "Create a new account"}
               </Text>
 
               {!isLogin && (
                 <TextField.Root
+                  type="text"
+                  name="name"
+                  id="name"
                   placeholder="Name"
+                  autoComplete="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -62,7 +74,10 @@ export default function AuthPage() {
 
               <TextField.Root
                 type="email"
+                name="email"
+                id="email"
                 placeholder="Email address"
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -70,6 +85,8 @@ export default function AuthPage() {
 
               <TextField.Root
                 type="password"
+                name="password"
+                id="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -77,14 +94,13 @@ export default function AuthPage() {
               />
 
               <Button type="submit" size="3">
-                {isLogin ? 'Sign in' : 'Sign up'}
+                {isLogin ? "Sign in" : "Sign up"}
               </Button>
 
-              <Button 
-                variant="ghost" 
-                onClick={() => setIsLogin(!isLogin)}
-              >
-                {isLogin ? 'Need an account? Sign up' : 'Already have an account? Sign in'}
+              <Button variant="ghost" onClick={() => setIsLogin(!isLogin)}>
+                {isLogin
+                  ? "Need an account? Sign up"
+                  : "Already have an account? Sign in"}
               </Button>
             </Flex>
           </form>
